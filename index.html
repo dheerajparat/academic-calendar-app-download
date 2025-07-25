@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Academic Calendar App - Student Planner</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      :root {
+        --primary: #4361ee;
+        --secondary: #3f37c9;
+        --accent: #4895ef;
+        --light: #f8f9fa;
+        --dark: #212529;
+        --success: #4cc9f0;
+        --text: #333;
+      }
+
+      body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+        color: var(--text);
+        line-height: 1.6;
+      }
+
+      .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+      }
+
+      header {
+        background: linear-gradient(to right, var(--primary), var(--secondary));
+        color: white;
+        padding: 20px 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .logo i {
+        font-size: 2.5rem;
+      }
+
+      .logo h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+      }
+
+      nav ul {
+        display: flex;
+        list-style: none;
+        gap: 25px;
+      }
+
+      nav a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        padding: 5px 10px;
+        border-radius: 4px;
+      }
+
+      nav a:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .hero {
+        padding: 80px 0;
+        background: url("https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80")
+          no-repeat center center/cover;
+        position: relative;
+        text-align: center;
+        color: white;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .hero h2 {
+        font-size: 3.5rem;
+        margin-bottom: 20px;
+        font-weight: 800;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .hero p {
+        font-size: 1.4rem;
+        margin-bottom: 30px;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 14px 32px;
+        background: var(--accent);
+        color: white;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4);
+      }
+
+      .btn:hover {
+        background: var(--secondary);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(67, 97, 238, 0.6);
+      }
+
+      .btn-download {
+        background: #4caf50;
+        box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+      }
+
+      .btn-download:hover {
+        background: #45a049;
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
+      }
+
+      section {
+        padding: 80px 0;
+      }
+
+      .section-title {
+        text-align: center;
+        margin-bottom: 60px;
+      }
+
+      .section-title h2 {
+        font-size: 2.5rem;
+        color: var(--primary);
+        margin-bottom: 15px;
+        position: relative;
+        display: inline-block;
+      }
+
+      .section-title h2::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: var(--accent);
+        border-radius: 2px;
+      }
+
+      .section-title p {
+        font-size: 1.2rem;
+        color: #666;
+        max-width: 700px;
+        margin: 20px auto 0;
+      }
+
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 50px;
+      }
+
+      .feature-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-align: center;
+        padding: 40px 25px;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .feature-icon {
+        width: 80px;
+        height: 80px;
+        background: rgba(67, 97, 238, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 25px;
+        color: var(--primary);
+        font-size: 2rem;
+      }
+
+      .feature-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+        color: var(--dark);
+      }
+
+      .screenshots {
+        background: #f0f4f8;
+      }
+
+      .screenshot-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+      }
+
+      .screenshot-item {
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+        height: 500px;
+        background: white;
+      }
+
+      .screenshot-item:hover {
+        transform: scale(1.03);
+      }
+
+      .screenshot-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .download {
+        text-align: center;
+        background: linear-gradient(to bottom right, #3a0ca3, #4361ee);
+        color: white;
+      }
+
+      .download-content {
+        max-width: 700px;
+        margin: 0 auto;
+      }
+
+      .download h2 {
+        font-size: 2.8rem;
+        margin-bottom: 20px;
+      }
+
+      .download p {
+        font-size: 1.2rem;
+        margin-bottom: 40px;
+        opacity: 0.9;
+      }
+
+      .app-info {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        margin-top: 30px;
+        flex-wrap: wrap;
+      }
+
+      .app-details {
+        text-align: left;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 25px;
+        border-radius: 15px;
+        max-width: 500px;
+      }
+
+      .app-details h3 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .info-item {
+        display: flex;
+        margin-bottom: 15px;
+      }
+
+      .info-label {
+        width: 120px;
+        font-weight: 600;
+      }
+
+      .info-value {
+        flex: 1;
+      }
+
+      footer {
+        background: var(--dark);
+        color: white;
+        padding: 40px 0 20px;
+      }
+
+      .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 40px;
+        margin-bottom: 40px;
+      }
+
+      .footer-column h3 {
+        font-size: 1.4rem;
+        margin-bottom: 20px;
+        position: relative;
+        padding-bottom: 10px;
+      }
+
+      .footer-column h3::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background: var(--accent);
+      }
+
+      .footer-column ul {
+        list-style: none;
+      }
+
+      .footer-column ul li {
+        margin-bottom: 12px;
+      }
+
+      .footer-column ul li a {
+        color: #aaa;
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+
+      .footer-column ul li a:hover {
+        color: white;
+      }
+
+      .social-links {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .social-links a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        color: white;
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+
+      .social-links a:hover {
+        background: var(--accent);
+        transform: translateY(-3px);
+      }
+
+      .copyright {
+        text-align: center;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.9rem;
+        color: #aaa;
+      }
+
+      @media (max-width: 768px) {
+        .header-content {
+          flex-direction: column;
+          gap: 20px;
+        }
+
+        nav ul {
+          gap: 15px;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        .hero h2 {
+          font-size: 2.5rem;
+        }
+
+        .hero p {
+          font-size: 1.1rem;
+        }
+      }
+
+      .qrcode-container {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        display: inline-block;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .qrcode-container img {
+        width: 150px;
+        height: 150px;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header Section -->
+    <header>
+      <div class="container">
+        <div class="header-content">
+          <div class="logo">
+            <img
+              src="https://github.com/dheerajparat/academic-calendar-app/blob/main/app/src/main/res/drawable/icon.png?raw=true"
+              alt="App Icon"
+              style="
+                width: 48px;
+                height: 48px;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(67, 97, 238, 0.15);
+                margin-right: 10px;
+              "
+            />
+            <h1>Academic Calendar</h1>
+          </div>
+          <nav>
+            <ul>
+              <li><a href="#features">Features</a></li>
+              <li><a href="#screenshots">Screenshots</a></li>
+              <li><a href="#download">Download</a></li>
+              <li><a href="#about">About</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h2>Organize Your Academic Life</h2>
+          <p>
+            The ultimate planner for students to track classes, assignments,
+            exams, and events all in one place
+          </p>
+          <a href="#download" class="btn btn-download">Download Now</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features">
+      <div class="container">
+        <div class="section-title">
+          <h2>Powerful Features</h2>
+          <p>
+            Designed specifically for students to help manage their academic
+            journey efficiently
+          </p>
+        </div>
+
+        <div class="features">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-calendar-day"></i>
+            </div>
+            <h3>Class Schedule</h3>
+            <p>
+              Manage your weekly timetable with color-coded classes and
+              automatic reminders before each session.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-tasks"></i>
+            </div>
+            <h3>Assignment Tracker</h3>
+            <p>
+              Never miss a deadline again. Track all your assignments with
+              priority levels and submission dates.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-book"></i>
+            </div>
+            <h3>Exam Planner</h3>
+            <p>
+              Plan your study sessions with countdown timers and topic-wise
+              progress tracking for each exam.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-bell"></i>
+            </div>
+            <h3>Smart Reminders</h3>
+            <p>
+              Customizable notifications for classes, assignments, exams, and
+              personal events.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-chart-pie"></i>
+            </div>
+            <h3>Performance Analytics</h3>
+            <p>
+              Visualize your academic progress with insightful charts and
+              performance reports.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-sync-alt"></i>
+            </div>
+            <h3>Cloud Sync</h3>
+            <p>
+              Access your schedule from any device. Automatic backup ensures you
+              never lose data.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Screenshots Section -->
+    <section id="screenshots" class="screenshots">
+      <div class="container">
+        <div class="section-title">
+          <h2>App Screenshots</h2>
+          <p>
+            Get a glimpse of the beautiful and intuitive interface designed for
+            productivity
+          </p>
+        </div>
+
+        <div class="screenshot-grid">
+          <div class="screenshot-item">
+            <img
+              src="https://github.com/dheerajparat/academic-calendar-app/blob/main/Screenshot_20250428_150847_Academic%20calender.png?raw=true"
+              alt="Dashboard view"
+            />
+          </div>
+          <div class="screenshot-item">
+            <img
+              src="https://github.com/dheerajparat/academic-calendar-app/blob/main/Screenshot_20250428_234108_Academic%20calender.png?raw=true"
+              alt="Weekly schedule"
+            />
+          </div>
+          <div class="screenshot-item">
+            <img
+              src="https://github.com/dheerajparat/academic-calendar-app/blob/main/Screenshot_20250428_234200_Academic%20calender.png?raw=true"
+              alt="Assignment tracker"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="download">
+      <div class="container">
+        <div class="download-content">
+          <h2>Download Now</h2>
+          <p>
+            Available for Android devices. Join thousands of students who have
+            organized their academic life.
+          </p>
+
+          <a
+            href="https://github.com/dheerajparat/academic-calendar-app/raw/main/app-release.apk"
+            class="btn btn-download"
+          >
+            <i class="fas fa-download"></i> Download APK (v1.2.0)
+          </a>
+
+          <div class="app-info">
+            <div class="qrcode-container">
+              <img
+                src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://github.com/dheerajparat/academic-calendar-app/raw/main/app-release.apk"
+                alt="Download QR Code"
+              />
+              <p style="text-align: center; margin-top: 10px; color: #333">
+                Scan to download
+              </p>
+            </div>
+
+            <div class="app-details">
+              <h3><i class="fas fa-info-circle"></i> App Details</h3>
+              <div class="info-item">
+                <div class="info-label">Version:</div>
+                <div class="info-value">1.2.0</div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">Size:</div>
+                <div class="info-value">18.7 MB</div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">Updated:</div>
+                <div class="info-value">July 15, 2023</div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">Requirements:</div>
+                <div class="info-value">Android 8.0+</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-column">
+            <h3>Academic Calendar</h3>
+            <p>
+              A comprehensive planner designed for students to manage their
+              academic schedules, assignments, and exams efficiently.
+            </p>
+            <div class="social-links">
+              <a href="https://www.facebook.com/profile.php?id=100075997455167"
+                ><i class="fab fa-facebook-f"></i
+              ></a>
+              <a href="https://twitter.com/dheerajparat"
+                ><i class="fab fa-twitter"></i
+              ></a>
+              <a href="https://www.instagram.com/dheerajparat"
+                ><i class="fab fa-instagram"></i
+              ></a>
+              <a href="https://github.com/dheerajparat"
+                ><i class="fab fa-github"></i
+              ></a>
+            </div>
+          </div>
+
+          <div class="footer-column">
+            <h3>Quick Links</h3>
+            <ul>
+              <li><a href="#features">Features</a></li>
+              <li><a href="#screenshots">Screenshots</a></li>
+              <li><a href="#download">Download</a></li>
+              <li><a href="#">FAQ</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-column">
+            <h3>Support</h3>
+            <ul>
+              <li><a href="#">Help Center</a></li>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#">Feedback</a></li>
+              <li><a href="#">Report Issue</a></li>
+              <li><a href="#">Request Feature</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-column">
+            <h3>Contact</h3>
+            <ul>
+              <li><i class="fas fa-envelope"></i> dheerajparat@gmail.com</li>
+              <li>
+                <i class="fab fa-github"></i>
+                <a href="https://github.com/dheerajparat"
+                  >github.com/dheerajparat</a
+                >
+              </li>
+              <li>
+                <i class="fas fa-map-marker-alt"></i> Aurangabad, Bihar, India
+              </li>
+              <li>
+                <i class="fas fa-code"></i>
+                <a href="https://github.com/dheerajparat/academic-calendar-app"
+                  >Academic Calendar App Repo</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="copyright">
+          <p>
+            &copy; 2025 Academic Calendar App. All rights reserved. Designed by
+            Dheeraj Parat
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
